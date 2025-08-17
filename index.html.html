@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فرم آزمون قوانین RP - دادگستری شهر عشق</title>
+  <style>
+    body {
+      font-family: Tahoma, Vazirmatn, sans-serif;
+      background: #222;
+      color: #fff;
+      direction: rtl;
+      text-align: right;
+      padding: 20px;
+    }
+    .form-box {
+      background: #333;
+      padding: 24px;
+      border-radius: 16px;
+      max-width: 720px;
+      margin: auto;
+      box-shadow: 0 0 20px rgba(0,0,0,0.6);
+      border: 1px solid #444;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .logo {
+      width: 36px;
+      height: 36px;
+      border: 2px solid #ffd700;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #ffd700;
+    }
+    h2 {
+      text-align: center;
+      margin: 6px 0 18px 0;
+      color: #ffd700;
+      font-size: 22px;
+    }
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 600;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #1e1e1e;
+      color: #fff;
+      box-sizing: border-box;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .hint { font-size: 12px; color: #ccc; margin-top: 4px; }
+    button {
+      background: #ffd700;
+      color: #000;
+      font-weight: 700;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 16px;
+    }
+    button:hover { background: #ffcc00; }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #bbb;
+      margin-top: 14px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 640px) {
+      .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="form-box">
+    <div class="header">
+      <div class="logo">⚖️</div>
+      <div>دادگستری شهر عشق</div>
+    </div>
+    <h2>📜 فرم آزمون قوانین دادگستری شهر عشق</h2>
+
+    <form id="rpForm">
+      <div class="row">
+        <div>
+          <label for="fullname">نام کامل</label>
+          <input id="fullname" name="fullname" type="text" placeholder="مثال: مهدی احمدی" required>
+        </div>
+        <div>
+          <label for="age">سن</label>
+          <input id="age" name="age" type="number" min="10" max="80" placeholder="مثال: 18" required>
+        </div>
+      </div>
+
+      <label for="job">رسته شغلی در RP</label>
+      <select id="job" name="job" required>
+        <option value="">انتخاب کنید…</option>
+        <option>پلیس</option>
+        <option>پزشک</option>
+        <option>وکیل/قاضی</option>
+        <option>شهروند عادی</option>
+        <option>سایر</option>
+      </select>
+
+      <label for="q1">سوال 1: VDM یعنی چه و یک مثال بزنید؟</label>
+      <textarea id="q1" name="q1" placeholder="پاسخ را اینجا وارد کنید …" required></textarea>
+
+      <label for="q2">سوال 2: تفاوت RDM با VDM چیست؟</label>
+      <textarea id="q2" name="q2" placeholder="پاسخ را اینجا وارد کنید…" required></textarea>
+
+      <label for="q3">سوال 3: در قانون FearRP چه زمانی باید تسلیم شوید؟</label>
+      <textarea id="q3" name="q3" placeholder="پاسخ را اینجا وارد کنید…" required></textarea>
+
+      <label for="q4">سوال 4: چرا PowerGaming ممنوع است؟</label>
+      <textarea id="q4" name="q4" placeholder="پاسخ را اینجا وارد کنید…" required></textarea>
+
+      <label for="q5">سوال 5: دستور ایست پلیس را چگونه رعایت می‌کنید؟</label>
+      <textarea id="q5" name="q5" placeholder="پاسخ را اینجا وارد کنید…" required></textarea>
+
+      <button type="submit">ارسال فرم ✅</button>
+      <div class="footer">https://discord.gg/aZAQ2xef</div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('rpForm');
+    const KEY = 'gta_v_rp_form';
+    const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1406638410545758251/viHtBzA4-0Hqm-4EVo8tXPkEEue6FqMxM6R0G5nt6gVU1ocoMLws86HV0HiRUrDjpQ8H';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem(KEY);
+      if (saved) {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(k => {
+          if (form.elements[k]) form.elements[k].value = data[k];
+        });
+      }
+    });
+
+    form.addEventListener('input', () => {
+      const data = {};
+      Array.from(form.elements).forEach(el => {
+        if (el.name) data[el.name] = el.value;
+      });
+      localStorage.setItem(KEY, JSON.stringify(data));
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {};
+      Array.from(form.elements).forEach(el => {
+        if (el.name) data[el.name] = el.value;
+      });
+      const content = `
+**نام کامل:** ${data.fullname}
+**سن:** ${data.age}
+**رسته شغلی:** ${data.job}
+
+**سوال 1:** ${data.q1}
+**سوال 2:** ${data.q2}
+**سوال 3:** ${data.q3}
+**سوال 4:** ${data.q4}
+**سوال 5:** ${data.q5}
+      `;
+      try {
+        const response = await fetch(DISCORD_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content })
+        });
+        if (response.ok) {
+          alert('✅ پاسخ‌های شما با موفقیت به دیسکورد ارسال شد!');
+          form.reset();
+          localStorage.removeItem(KEY);
+        } else {
+          alert('⚠️ خطا در ارسال به دیسکورد مطمئن شوید فیلتر شکن شما وصل است .');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('⚠️ خطا در ارسال به دیسکورد مطمئن شوید فیلتر شکن شما وصل است.');
+      }
+    });
+  </script>
+</body>
+</html>
